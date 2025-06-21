@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Navigation System</title>
+    <link rel="stylesheet" href="/static/style.css">
+    
+    
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+          <div class="nav-logo">CampusNav</div>
+          <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Map</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+    <div class="container">
+        <header>
+            <h1>Campus Navigation System</h1>
+            <p class="subtitle">Find the best route between campus locations</p>
+        </header>
+
+        <div class="map-container">
+            <img src="/static/campus_map.jpg" alt="Campus Map" id="campusMap" crossorigin="anonymous">
+            <!-- Canvas for path drawing will be inserted here by JavaScript -->
+        </div>
+
+        <div class="controls">
+            <div class="form-group">
+                <label for="startLocation">From:</label>
+                <select id="startLocation" class="location-select">
+                    <option value="">Select starting point</option>
+                    {% if nodes %}
+                        {% for id, node in nodes.items() %}
+                            <option value="{{ id }}" data-x="{{ node.x }}" data-y="{{ node.y }}">
+                                {{ node.name }} ({{ node.type|replace('_', ' ')|title }})
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="endLocation">To:</label>
+                <select id="endLocation" class="location-select">
+                    <option value="">Select destination</option>
+                    {% if nodes %}
+                        {% for id, node in nodes.items() %}
+                            <option value="{{ id }}" data-x="{{ node.x }}" data-y="{{ node.y }}">
+                                {{ node.name }} ({{ node.type|replace('_', ' ')|title }})
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+            
+            <div class="button-group">
+                <button id="findPathBtn" class="primary-btn">Find Path</button>
+                <button id="sendSMSBtn" class="secondary-btn" disabled>Send Directions to Phone</button>
+            </div>
+        </div>
+        
+        <div id="pathResult" class="results hidden">
+            <h2>Recommended Route</h2>
+            <div class="path-summary">
+                <div id="pathSummary" class="summary-text"></div>
+                <div id="pathTimeDistance" class="time-distance"></div>
+            </div>
+            <div id="pathDetails" class="path-steps"></div>
+        </div>
+
+       
+    </div>
+
+    <script src="/static/script.js" defer> window.graphData = {{ graph_data | tojson | safe }};</script>
+    
+</body>
+</html>
